@@ -1,7 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
-#include <WiFiManager.h>
 
 const int debounce_delay = 50; 
 
@@ -71,6 +70,15 @@ Button button4 = Button(D3, []() {Serial.println("Button 4 pressed");});
 
 void setup() {
   Serial.begin(115200);
+
+    // Connect to Wi-Fi
+  Serial.print("Connecting to Wi-Fi");
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nConnected to Wi-Fi");
 }
 
 void loop() {
