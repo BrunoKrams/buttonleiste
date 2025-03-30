@@ -7,10 +7,9 @@ const int debounce_delay = 50;
 
 const char* ssid = "???";     // Replace with your Wi-Fi name
 const char* password = "???"; // Replace with your Wi-Fi password
-const char* kitchenlightWindowUrl = "http://192.168.178.106/relay/0?turn=toggle";
-const char* kitchenlightCounterUrl = "http://192.168.178.106/relay/0?turn=toggle"; 
+const char* kitchenlightWindowUrl = "http://192.168.178.108/relay/0?turn=toggle";
+const char* kitchenlightCounterUrl = "http://192.168.178.105/relay/0?turn=toggle"; 
 const char* garagelightUrl = "http://192.168.178.106/relay/0?turn=toggle"; 
-const char* energymonitorUrl = "http://192.168.178.106/relay/0?turn=toggle";
 
 class Button {
   private:
@@ -46,11 +45,11 @@ class Button {
     }
 };
 
-void sendHttpRequest() {
+void sendHttpRequest(const char* url) {
   if (WiFi.status() == WL_CONNECTED) {
     WiFiClient wifiClient;
     HTTPClient http;
-    http.begin(wifiClient, serverUrl);
+    http.begin(wifiClient, url);
     int httpCode = http.GET();
 
     if (httpCode > 0) {
@@ -65,9 +64,9 @@ void sendHttpRequest() {
   }
 }
 
-Button button1 = Button(D7, []() {Serial.println("Button 1 pressed");});
-Button button2 = Button(D1, []() {Serial.println("Button 2 pressed");});
-Button button3 = Button(D2, []() {Serial.println("Button 3 pressed");});
+Button button1 = Button(D7, []() {sendHttpRequest(kitchenlightWindowUrl);});
+Button button2 = Button(D1, []() {sendHttpRequest(kitchenlightCounterUrl);});
+Button button3 = Button(D2, []() {sendHttpRequest(garagelightUrl);});
 Button button4 = Button(D3, []() {Serial.println("Button 4 pressed");});
 
 void setup() {
